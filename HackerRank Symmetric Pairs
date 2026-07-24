@@ -1,0 +1,19 @@
+SELECT a.X, a.Y
+FROM Functions a JOIN Functions b -- inner join is suitable given the conditions required of symmetry
+ON a.X = b.Y AND a.Y = b.X
+GROUP BY a.X, a.Y -- grouping for each pair to check count and sizing
+HAVING a.X < a.Y -- case 1 for x != y, ensuring correct formatting in answer
+OR (a.X = a.Y AND COUNT(*) > 1) -- case 2 for x = y, ensuring there is a pair and not just a single row joined to itself
+ORDER BY a.X
+
+
+
+-- Cross Join also works, as given below
+
+SELECT a.X, a.Y
+FROM Functions a, Functions b -- cross join is viable for small sizes, however is far more expensive than an inner join
+WHERE a.X = b.Y AND a.Y = b.X -- ON is replaced with WHERE, and rest of query functions the same
+GROUP BY a.X, a.Y
+HAVING a.X < a.Y
+OR (a.X = a.Y AND COUNT(*) > 1)
+ORDER BY a.X

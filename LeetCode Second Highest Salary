@@ -1,0 +1,11 @@
+Write a solution to find the second highest distinct salary from the Employee table. 
+If there is no second highest salary, return null (return None in Pandas).
+
+
+SOLUTION:
+
+SELECT ( -- select surrounding the query necessary so that data without a second highest salary can be set to null rather than return nothing
+  SELECT DISTINCT salary AS SecondHighestSalary
+  FROM Employee
+  ORDER BY salary DESC
+  LIMIT 1 OFFSET 1) AS SecondHighestSalary -- offset allows to skip a certain amount of people

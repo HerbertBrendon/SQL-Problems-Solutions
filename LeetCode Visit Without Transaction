@@ -1,0 +1,11 @@
+Write a solution to find the IDs of the users who visited without making any transactions and the number of times they made these types of visits.
+Return the result table sorted in any order.
+
+
+SOLUTION:
+
+SELECT customer_id, COUNT(customer_id) AS count_no_trans 
+FROM Visits LEFT JOIN Transactions -- left join to keep all visits
+ON Visits.visit_id = Transactions.visit_id
+WHERE transaction_id IS NULL -- null means no transaction on that visit
+GROUP BY customer_id

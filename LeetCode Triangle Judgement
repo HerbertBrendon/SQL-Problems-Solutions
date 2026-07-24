@@ -1,0 +1,10 @@
+Report for every three line segments whether they can form a triangle.
+Return the result table in any order.
+
+
+SOLUTION:
+
+SELECT x, y, z, 
+(IF(x < y + z AND y < x + z AND z < x + y, 'Yes', 'No')) AS triangle -- using the triangle inequality for a geometric solution
+FROM Triangle
+GROUP BY x, y, z

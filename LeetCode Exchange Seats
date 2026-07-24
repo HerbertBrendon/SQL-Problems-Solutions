@@ -1,0 +1,13 @@
+Write a solution to swap the seat id of every two consecutive students. 
+If the number of students is odd, the id of the last student is not swapped.
+Return the result table ordered by id in ascending order.
+
+
+SOLUTION:
+
+SELECT LEAST(id + IF(id % 2 = 1, 1, -1), COUNT(*) OVER()) AS id, student
+-- LEAST to get case of if it is the last entry in an odd amount of ids
+-- IF case to decide whether a person should move up or down a seat depending on their modularity, resulting in swapping of seats in same sized groups as the mod function. 
+
+FROM Seat
+ORDER BY id ASC

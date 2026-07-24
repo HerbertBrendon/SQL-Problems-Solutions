@@ -1,0 +1,20 @@
+A company's executives are interested in seeing who earns the most money in each of the company's departments. 
+A high earner in a department is an employee who has a salary in the top three unique salaries for that department.
+Write a solution to find the employees who are high earners in each of the departments.
+Return the result table in any order.
+
+
+SOLUTION:
+
+WITH Rankings AS -- cte to add ranks
+(SELECT Department.name Department, -- also renaming table columns to what they are expected to be in the solution
+Employee.name Employee,
+Employee.salary Salary,
+DENSE_RANK() OVER (PARTITION BY Employee.departmentId ORDER BY Employee.salary DESC) AS ranking -- dense rank to allow ties and not skip rank numbers
+FROM Employee JOIN Department
+ON Employee.departmentId = Department.id)
+
+SELECT Department, Employee, Salary
+FROM Rankings
+WHERE ranking <= 3 -- simply check if it is a top 3 unique salary.
+-- If DENSE_RANK was replaced with RANK or ROW_NUMBER, the ranking check would not work and the variable to check would be ambiguous.

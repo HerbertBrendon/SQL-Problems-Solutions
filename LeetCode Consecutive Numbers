@@ -1,0 +1,11 @@
+Find all numbers that appear at least three times consecutively.
+Return the result table in any order.
+
+
+SOLUTION:
+
+SELECT DISTINCT One.num AS ConsecutiveNums
+
+FROM (Logs One JOIN Logs Two ON Two.id - One.id = 1) -- join for 2nd consecutive
+JOIN Logs Three ON Three.id - Two.id = 1 -- join for 3rd consecutive
+WHERE One.num = Two.num AND Two.num = Three.num -- makes check

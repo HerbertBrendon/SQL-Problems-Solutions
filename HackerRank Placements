@@ -1,0 +1,31 @@
+HackerRank: Placements (medium, advanced joins)
+
+"You are given a table, Projects, containing three columns: Task_ID, Start_Date and End_Date. 
+It is guaranteed that the difference between the End_Date and the Start_Date is equal to 1 day for each row in the table.
+If the End_Date of the tasks are consecutive, then they are part of the same project. Samantha is interested in finding the total number of different projects completed.
+Write a query to output the start and end dates of projects listed by the number of days it took to complete the project in ascending order. 
+If there is more than one project that have the same number of completion days, then order by the start date of the project."
+
+
+
+SOLUTION:
+
+SELECT Start_Date, MIN(End_Date) -- MIN takes the earliest date, therefore the end of that specific project
+FROM
+    (SELECT Start_Date 
+    FROM Projects 
+    WHERE Start_Date NOT IN (SELECT End_Date FROM Projects)) A -- checking if not in end_date ensures it is a start and not a continuation
+    
+    CROSS JOIN -- other joins just don't work with the limited information about when a project ends, and cross join is doable with the small table size
+    
+    (SELECT End_Date
+    FROM Projects
+    WHERE End_Date NOT IN (SELECT Start_Date FROM Projects)) B -- checking if not in start_date does same
+    
+    WHERE Start_Date < End_Date -- ensure earlier projects don't affect result
+    
+    GROUP BY Start_Date -- grouping so that MIN aggregate function works for each
+    
+    ORDER BY 
+        DATEDIFF(MIN(End_Date), Start_Date), 
+        Start_Date -- required ordering for ascending project duration, and start date if equal durations occur

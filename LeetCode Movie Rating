@@ -1,0 +1,22 @@
+Write a solution to:
+Find the name of the user who has rated the greatest number of movies. In case of a tie, return the lexicographically smaller user name.
+Find the movie name with the highest average rating in February 2020. In case of a tie, return the lexicographically smaller movie name.
+
+
+SOLUTION:
+
+(SELECT Users.name AS results 
+FROM Users LEFT JOIN MovieRating ON Users.user_id = MovieRating.user_id
+GROUP BY MovieRating.user_id
+ORDER BY COUNT(MovieRating.user_id) DESC, Users.name ASC -- ordering by greatest count of ratings
+LIMIT 1)
+
+UNION ALL -- union all to ensure no weird case where the movie's title is the same as the user's name
+
+(SELECT Movies.title AS results
+FROM Movies 
+LEFT JOIN MovieRating ON Movies.movie_id = MovieRating.movie_id
+WHERE MovieRating.created_at LIKE '2020-02-%' -- LIKE function and % in quotes to find dates in that calendar month
+GROUP BY Movies.title
+ORDER BY AVG(MovieRating.rating) DESC, Movies.title ASC
+LIMIT 1)

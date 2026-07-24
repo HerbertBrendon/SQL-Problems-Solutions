@@ -1,0 +1,11 @@
+Write a solution to get the names of products that have at least 100 units ordered in February 2020 and their amount.
+Return the result table in any order.
+
+
+SOLUTION:
+
+WITH total AS (SELECT product_id, SUM(unit) AS sales FROM Orders WHERE order_date LIKE '2020-02%' GROUP BY product_id) -- finds our wanted data from 2020-02 and saves in a cte for easy use for this query and future analysis
+
+SELECT Products.product_name, total.sales AS unit
+FROM Products JOIN total ON Products.product_id = total.product_id
+WHERE total.sales >= 100

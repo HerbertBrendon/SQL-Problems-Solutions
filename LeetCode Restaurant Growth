@@ -1,0 +1,15 @@
+You are the restaurant owner and you want to analyze a possible expansion (there will be at least one customer every day).
+Compute the moving average of how much the customer paid in a seven days window (i.e., current day + 6 days before). 
+average_amount should be rounded to two decimal places.
+Return the result table ordered by visited_on in ascending order.
+
+
+SOLUTION:
+
+WITH running_total AS (SELECT visited_on, SUM(amount) AS summed FROM Customer GROUP BY visited_on) -- first sum for daily amount
+
+Select a.visited_on, SUM(b.summed) AS amount, ROUND(SUM(b.summed)/7, 2) AS average_amount -- summing the sums to get total for the past 7 days
+FROM running_total a LEFT JOIN running_total b
+ON DATEDIFF(a.visited_on, b.visited_on) BETWEEN 0 AND 6
+GROUP BY a.visited_on
+HAVING COUNT(b.visited_on) > 6

@@ -1,0 +1,15 @@
+Write a solution to find managers with at least five direct reports.
+Return the result table in any order.
+
+
+SOLUTION:
+
+SELECT Employee.name
+FROM Employee 
+LEFT JOIN ( -- inner join also works, but left join could keep null values that may be of importance in further analysis
+    SELECT managerId, 
+    COUNT(managerId) AS count -- counting the occurence of each manager id
+    FROM Employee 
+    GROUP BY managerId) AS Occurence 
+ON Employee.id = Occurence.managerId -- connecting the link between an employee being a manager
+WHERE Occurence.count >= 5 -- checking they have the direct reports

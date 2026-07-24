@@ -1,0 +1,11 @@
+Write a solution to report the customer ids from the Customer table that bought all the products in the Product table.
+Return the result table in any order.
+
+
+SOLUTION:
+
+SELECT customer_id 
+FROM Customer
+GROUP BY customer_id 
+HAVING COUNT(DISTINCT Customer.product_key) = (SELECT COUNT(Product.product_key) FROM Product)
+-- uses subquery to check number of products, then DISTINCT to check the customer's product types

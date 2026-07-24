@@ -1,0 +1,11 @@
+Write a solution to report the fraction of players that logged in again on the day after the day they first logged in, rounded to 2 decimal places. 
+In other words, you need to determine the number of players who logged in on the day immediately following their initial login, and divide it by the number of total players.
+
+
+SOLUTION:
+
+SELECT ROUND(COUNT(DISTINCT a1.player_id) / (SELECT COUNT(DISTINCT player_id) FROM Activity), 2) AS fraction
+FROM
+(SELECT player_id, MIN(event_date) AS first FROM Activity GROUP BY player_id) a1
+JOIN Activity a2 ON a1.player_id = a2.player_id -- inner join to isolate those who return the next day
+AND DATEDIFF(a2.event_date, a1.first) = 1 -- datediff checks next day access
